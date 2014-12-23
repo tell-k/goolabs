@@ -5,6 +5,7 @@ Goo labs API client for python. And provide some command line tools.
 Features
 ========
 * Provide API Client for `Goo labs API <https://labs.goo.ne.jp/api/>`_.
+* Provide some command line tools.
 
 Required
 ========
@@ -372,9 +373,7 @@ Sample of use.
   豊洲,LOC
 
   # more option
-  $ goolabs entity --sentence 佐藤氏、2014年12月に足の小指骨折し豊洲の病院へ --class-filter PSN,LOC
-  佐藤,PSN
-  豊洲,LOC
+  $ goolabs entity --class-filter PSN,LOC --sentence 佐藤氏、2014年12月に足の小指骨折し豊洲の病院へ 
 
   # specify a file as an alternative to the sentence
   $ goolabs entity --file sentence.txt
