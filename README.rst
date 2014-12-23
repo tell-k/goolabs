@@ -209,7 +209,7 @@ To use this cli, it is recommended to set the environment variable GOOLABS_APP_I
 
 .. code-block:: bash
 
- # write your shell setting files(ex ~/.basrc).
+ # write your shell setting files(ex ~/.bashrc).
  export GOOLABS_APP_ID=xxxxxxxxxxxxxxx
 
 May be passed every time an App id to the command. But it does not recommend.
