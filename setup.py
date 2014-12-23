@@ -41,7 +41,6 @@ requires = [
 tests_require = [
     "pytest-cov",
     "pytest",
-    "flake8",
     "mock",
     "testfixtures",
     "responses",
