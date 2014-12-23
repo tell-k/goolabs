@@ -16,7 +16,7 @@ from goolabs import GoolabsAPI
 
 def text(s):
     if isinstance(s, binary_type):
-        return unicode(s, encoding=locale.getpreferredencoding())
+        return s.decode(locale.getpreferredencoding())
     return s
 
 
