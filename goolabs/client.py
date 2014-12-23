@@ -33,7 +33,7 @@ class GoolabsAPI(object):
         req_url = self.BASE_API_URL.format(func)
 
         def inner_func(**kwargs):
-            payload = {k: v for k, v in kwargs.items() if v}
+            payload = dict([(k, v) for k, v in kwargs.items() if v])
             payload.update({"app_id": self._app_id})
             self.response = requests.post(
                 req_url,
