@@ -251,7 +251,7 @@ Sample of use.
   。,句点,＄
 
   # more option
-  $ goolabs morph --sentence 日本語を分析します。--info-filter from,pos,read --pos-filter 名詞,句点
+  $ goolabs morph --sentence 日本語を分析します。--info-filter form,pos,read --pos-filter 名詞,句点
 
   # specify a file as an alternative to the sentence
   $ goolabs morph --file sentence.txt
