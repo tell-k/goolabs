@@ -32,6 +32,8 @@ with open(os.path.join(here, 'goolabs', '__init__.py'), 'r') as f:
     version = re.compile(
         r".*__version__ = '(.*?)'", re.S).match(f.read()).group(1)
 
+readme = open(os.path.join(here, 'README.rst')).read()
+
 requires = [
     "requests",
     "six",
@@ -71,8 +73,8 @@ classifiers = [
 setup(
     name="goolabs",
     version=version,
-    description="goolabs api client",
-    long_description="",
+    description="Goo labs API client for python. And provide some command line tools.",  # NOQA
+    long_description=readme,
     url="https://github/tell-k/goolabs",
     author="tell-k",
     author_email="ffk2005 at gmail.com",
