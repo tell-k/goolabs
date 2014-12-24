@@ -1,6 +1,6 @@
 Goo labs API client for python. And provide some command line tools.
 
-|travis| 
+|travis| |downloads| |version| |license|
 
 .. contents:: Table of Contents
    :local:
@@ -416,7 +416,7 @@ Authors
 History
 =======
 
-0.1.0(Dec 23, 2014)
+0.1.0(Dec 25, 2014)
 ---------------------
 * First release
 
