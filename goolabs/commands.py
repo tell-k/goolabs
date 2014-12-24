@@ -8,9 +8,12 @@
 """
 
 import json
-import click
 import locale
+
+import click
 from six import binary_type
+
+import goolabs
 from goolabs import GoolabsAPI
 
 
@@ -29,8 +32,8 @@ def clean_app_id(app_id):
 
 def clean_sentence(sentence, sentence_file):
     if not sentence and not sentence_file:
-        raise click.UsageError('Missing option.'
-                               ' You must set --sentence or --file option.')
+        raise click.UsageError('Missing sentence. You must set'
+                               ' SENTENCE argument or --file option.')
     if not sentence and sentence_file:
         sentence = text(sentence_file.read())
     return sentence
@@ -42,12 +45,13 @@ def format_json(json_data):
 
 @click.group()
 @click.pass_context
+@click.version_option(version=goolabs.__version__)
 def main(ctx):
     """ Command line tools for Goo labs API(https://labs.goo.ne.jp/api/). """
 
 
 @main.command()
-@click.option('--sentence', "-s", "sentence", type=text)
+@click.argument('sentence', required=False, type=text)
 @click.option('--app-id', "-a", "app_id", envvar='GOOLABS_APP_ID', type=text)
 @click.option('--request-id', "-r", "request_id", type=text)
 @click.option('--info-filter', "-i", "info_filter",
@@ -82,8 +86,7 @@ def morph(ctx, app_id, sentence_file, json_flag, **kwargs):
 
 
 @main.command()
-@click.option('--query-pair', "-q", "query_pair",
-              required=True, nargs=2, type=text)
+@click.argument('query_pair', required=True, nargs=2, type=text)
 @click.option('--app-id', "-a", "app_id", envvar='GOOLABS_APP_ID', type=text)
 @click.option('--request-id', "-r", "request_id", type=text)
 @click.option('--json/--no-json', "-j", "json_flag", default=False)
@@ -104,7 +107,7 @@ def similarity(ctx, app_id, json_flag, **kwargs):
 
 
 @main.command()
-@click.option('--sentence', "-s", "sentence", type=text)
+@click.argument('sentence', required=False, type=text)
 @click.option('--output-type', "-o", "output_type", default="hiragana",
               type=click.Choice(['hiragana', 'katakana']))
 @click.option('--app-id', "-a", "app_id", envvar='GOOLABS_APP_ID', type=text)
@@ -129,7 +132,7 @@ def hiragana(ctx, app_id, sentence_file, json_flag, **kwargs):
 
 
 @main.command()
-@click.option('--sentence', "-s", "sentence", type=text)
+@click.argument('sentence', required=False, type=text)
 @click.option('--class-filter', "-c", "class_filter",
               help="ART,ORG,PSN,LOC,DAT", type=text)
 @click.option('--app-id', "-a", "app_id", envvar='GOOLABS_APP_ID', type=text)

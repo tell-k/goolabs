@@ -14,7 +14,9 @@ Required
 Set up
 ======
 
-Coming Soon.
+Make environment with pip::
+
+  $ pip install goolabs
 
 Usage
 =====
@@ -194,14 +196,14 @@ Command line tool
     Command line tools for Goo labs API(https://labs.goo.ne.jp/api/).
 
   Options:
-    --help  Show this message and exit.
+    --version  Show the version and exit.
+    --help     Show this message and exit.
 
   Commands:
     entity      Extract unique representation from sentence.
     hiragana    Convert the Japanese to Hiragana or Katakana.
     morph       Morphological analysis for Japanese.
     similarity  Scoring the similarity of two words.
-
 
 Set environment variable GOOLABS_APP_ID
 ----------------------------------------
@@ -217,7 +219,7 @@ You may pass the App id every time you use it, but it's not recommended.
 
 .. code-block::
 
- $ goolabs morph --app-id xxxxx --sentence 日本語を分析します。 
+ $ goolabs morph --app-id xxxxx 日本語を分析します。 
 
 morph
 --------------------
@@ -225,25 +227,24 @@ morph
 .. code-block:: bash
 
  $ goolabs morph --help
- Usage: goolabs morph [OPTIONS]
+ Usage: goolabs morph [OPTIONS] [SENTENCE]
 
    Morphological analysis for Japanese.
 
  Options:
-   -s, --sentence TEXT
    -a, --app-id TEXT
    -r, --request-id TEXT
    -i, --info-filter TEXT  form,pos,read
    -p, --pos-filter TEXT   名刺,動詞,形容詞,格助詞..etc
    -f, --file FILENAME
    -j, --json / --no-json
-   --help                          Show this message and exit.
+   --help                  Show this message and exit.
 
 Sample usage.
 
 .. code-block:: bash
 
-  $ goolabs morph --sentence 日本語を分析します。 
+  $ goolabs morph 日本語を分析します。 
   日本語,名詞,ニホンゴ
   を,格助詞,ヲ
   分析,名詞,ブンセキ
@@ -252,13 +253,13 @@ Sample usage.
   。,句点,＄
 
   # more option
-  $ goolabs morph --sentence 日本語を分析します。--info-filter form,pos,read --pos-filter 名詞,句点
+  $ goolabs morph --info-filter form,pos,read --pos-filter 名詞,句点 日本語を分析します。
 
   # specify a file as an alternative to the sentence
   $ goolabs morph --file sentence.txt
 
   # get raw json
-  $ goolabs morph --sentence 日本語  --json --request-id req001
+  $ goolabs morph --json --request-id req001 日本語
   {
     "word_list": [
       [
@@ -278,26 +279,25 @@ similarity
 .. code-block:: bash
 
   $ goolabs similarity --help
-  Usage: goolabs similarity [OPTIONS]
-  
+  Usage: goolabs similarity [OPTIONS] QUERY_PAIR...
+
     Scoring the similarity of two words.
-  
+
   Options:
-    -q, --query-pair TEXT...  [required]
     -a, --app-id TEXT
     -r, --request-id TEXT
     -j, --json / --no-json
-    --help                      Show this message and exit.
+    --help                  Show this message and exit.
 
 Sample usage.
 
 .. code-block:: bash
 
-  $ goolabs similarity --query-pair ウィンドウズ windows
+  $ goolabs similarity ウィンドウズ windows
   0.767982966647
 
   # get raw json.
-  $ goolabs similarity --query-pair ウィンドウズ windows  --json --request-id req002
+  $ goolabs similarity --json --request-id req002 ウィンドウズ windows
   {
     "score": 0.7679829666474438, 
     "request_id": "req002"
@@ -309,12 +309,11 @@ hiragana
 .. code-block:: bash
 
   $ goolabs hiragana --help
-  Usage: goolabs hiragana [OPTIONS]
-  
+  Usage: goolabs hiragana [OPTIONS] [SENTENCE]
+
     Convert the Japanese to Hiragana or Katakana.
-  
+
   Options:
-    -s, --sentence TEXT
     -o, --output-type [hiragana|katakana]
     -a, --app-id TEXT
     -r, --request-id TEXT
@@ -326,18 +325,18 @@ Sample usage.
 
 .. code-block:: bash
 
-  $ goolabs hiragana --sentence 日本語
+  $ goolabs hiragana 日本語
   にほんご
 
   # convert to Katakana
-  $ goolabs hiragana --sentence 日本語 --output-type katakana
+  $ goolabs hiragana --output-type katakana 日本語 
   ニホンゴ
 
   # specify a file as an alternative to the sentence
   $ goolabs hiragana --file sentence.txt
 
   # get raw json
-  $ goolabs hiragana --sentence 日本語 --json --request-id req003
+  $ goolabs hiragana --json --request-id req003 日本語
   {
     "output_type": "hiragana", 
     "converted": "にほんご", 
@@ -350,12 +349,11 @@ entity
 .. code-block:: bash
 
   $ goolabs entity --help
-  Usage: goolabs entity [OPTIONS]
+  Usage: goolabs entity [OPTIONS] [SENTENCE]
 
     Extract unique representation from sentence.
 
   Options:
-    -s, --sentence TEXT
     -c, --class-filter TEXT  ART,ORG,PSN,LOC,DAT
     -a, --app-id TEXT
     -r, --request-id TEXT
@@ -367,19 +365,19 @@ Sample usage.
 
 .. code-block:: bash
 
-  $ goolabs entity --sentence 佐藤氏、2014年12月に足の小指骨折し豊洲の病院へ
+  $ goolabs entity 佐藤氏、2014年12月に足の小指骨折し豊洲の病院へ
   佐藤,PSN
   2014年12月,DAT
   豊洲,LOC
 
   # more option
-  $ goolabs entity --class-filter PSN,LOC --sentence 佐藤氏、2014年12月に足の小指骨折し豊洲の病院へ 
+  $ goolabs entity --class-filter PSN,LOC 佐藤氏、2014年12月に足の小指骨折し豊洲の病院へ 
 
   # specify a file as an alternative to the sentence
   $ goolabs entity --file sentence.txt
 
   # get raw json
-  $ goolabs entity --sentence 佐藤氏 --json --request-id req004
+  $ goolabs entity --json --request-id req004 佐藤氏
   {
     "ne_list": [
       [

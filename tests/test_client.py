@@ -25,13 +25,13 @@ class TestGoolabsAPI(object):
       @property
       def app_id(self):
           # return "dummy_app_id"
-          return "xxxxxxxxxxxxxxxxxxxx" <= your App Id
+          return "xxxxxxxxxxxxxxxxxxxx" # <= your App Id
 
     2. Remove "responses.activate" decorator
 
     ::
 
-      # @responses.activate <= remove this decorator
+      @responses.activate # <= remove this decorator
       def test_morph(self):
 
     3. Test
