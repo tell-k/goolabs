@@ -4,6 +4,7 @@ Goo labs API client for python. And provide some command line tools.
 
 .. contents::
    :local:
+   :depth: 1
 
 Features
 ========
