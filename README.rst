@@ -2,7 +2,7 @@ Goo labs API client for python. And provide some command line tools.
 
 |travis| |downloads| |version| |license|
 
-.. contents:: Table of Contents
+.. contents::
    :local:
    :depth: 1
 
@@ -221,7 +221,7 @@ To use this cli, it is recommended to set the environment variable GOOLABS_APP_I
 
 You may pass the App id every time you use it, but it's not recommended.
 
-.. code-block::
+.. code-block:: bash
 
  $ goolabs morph --app-id xxxxx 日本語を分析します。 
 
