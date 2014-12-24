@@ -2,7 +2,7 @@ Goo labs API client for python. And provide some command line tools.
 
 |travis| 
 
-.. contents::
+.. contents:: Table of Contents
    :local:
    :depth: 1
 
