@@ -427,14 +427,14 @@ History
     :target: https://coveralls.io/r/tell-k/goolabs
     :alt: coveralls.io
 
-.. |downloads| image:: https://pypip.in/d/goolabs/badge.png
+.. |downloads| image:: https://pypip.in/d/goolabs/badge.svg
     :target: http://pypi.python.org/pypi/goolabs/
     :alt: downloads
 
-.. |version| image:: https://pypip.in/v/goolabs/badge.png
+.. |version| image:: https://pypip.in/v/goolabs/badge.svg
     :target: http://pypi.python.org/pypi/goolabs/
     :alt: latest version
 
-.. |license| image:: https://pypip.in/license/goolabs/badge.png
+.. |license| image:: https://pypip.in/license/goolabs/badge.svg
     :target: http://pypi.python.org/pypi/goolabs/
     :alt: license
