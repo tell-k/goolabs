@@ -2,6 +2,9 @@ Goo labs API client for python. And provide some command line tools.
 
 |travis| 
 
+.. contents::
+   :local:
+
 Features
 ========
 * Provide API Client for `Goo labs API <https://labs.goo.ne.jp/api/>`_.
