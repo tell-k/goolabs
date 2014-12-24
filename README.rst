@@ -172,7 +172,7 @@ Sample response.
 Other tips
 --------------------
 
-You can see the HTTP response you call just before.
+You can see the HTTP response you called right before.
 
 .. code-block:: python
 
@@ -213,7 +213,7 @@ To use this cli, it is recommended to set the environment variable GOOLABS_APP_I
  # write your shell setting files(ex ~/.bashrc).
  export GOOLABS_APP_ID=xxxxxxxxxxxxxxx
 
-May be passed every time an App id to the command. But it does not recommend.
+You may pass the App id every time you use it, but it's not recommended.
 
 .. code-block::
 
@@ -239,7 +239,7 @@ morph
    -j, --json / --no-json
    --help                          Show this message and exit.
 
-Sample of use.
+Sample usage.
 
 .. code-block:: bash
 
@@ -289,7 +289,7 @@ similarity
     -j, --json / --no-json
     --help                      Show this message and exit.
 
-Sample of use.
+Sample usage.
 
 .. code-block:: bash
 
@@ -322,7 +322,7 @@ hiragana
     -j, --json / --no-json
     --help                          Show this message and exit.
 
-Sample of use.
+Sample usage.
 
 .. code-block:: bash
 
@@ -363,7 +363,7 @@ entity
     -j, --json / --no-json
     --help                   Show this message and exit.
 
-Sample of use.
+Sample usage.
 
 .. code-block:: bash
 
