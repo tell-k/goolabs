@@ -239,7 +239,7 @@ morph
    -a, --app-id TEXT
    -r, --request-id TEXT
    -i, --info-filter TEXT  form,pos,read
-   -p, --pos-filter TEXT   名刺,動詞,形容詞,格助詞..etc
+   -p, --pos-filter TEXT   名刺,句点,格助詞..etc
    -f, --file FILENAME
    -j, --json / --no-json
    --help                  Show this message and exit.

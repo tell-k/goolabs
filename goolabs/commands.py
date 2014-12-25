@@ -57,7 +57,7 @@ def main(ctx):
 @click.option('--info-filter', "-i", "info_filter",
               type=text, help="form,pos,read")
 @click.option('--pos-filter', "-p", "pos_filter",
-              type=text, help=u"名刺,動詞,形容詞,格助詞..etc")
+              type=text, help=u"名刺,動詞活用語尾,句点..etc")
 @click.option('--file', "-f", "sentence_file", type=click.File('rb'))
 @click.option('--json/--no-json', "-j", "json_flag", default=False)
 @click.pass_context
