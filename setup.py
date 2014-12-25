@@ -75,7 +75,7 @@ setup(
     version=version,
     description="Goo labs API client for python. And provide some command line tools.",  # NOQA
     long_description=readme,
-    url="https://github/tell-k/goolabs",
+    url="https://github.com/tell-k/goolabs",
     author="tell-k",
     author_email="ffk2005 at gmail.com",
     classifiers=classifiers,
