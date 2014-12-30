@@ -8,7 +8,6 @@
 """
 from __future__ import division, print_function, absolute_import, unicode_literals  # NOQA
 
-import math
 import json
 import locale
 
