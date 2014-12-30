@@ -65,9 +65,9 @@ class TestCleanSentence(object):
             sentence="sentence", sentence_file="sentence_file")
 
     def test_sentence_file(self):
-        import cStringIO
+        import six
 
-        sentence_file = cStringIO.StringIO()
+        sentence_file = six.StringIO()
         sentence_file.write('sentence_file')
 
         sentence_file.seek(0)
@@ -270,7 +270,7 @@ Options:
             u"ウィンドウズ",
             "windows"
         ])
-        assert result.output == "0.767982966647\n"
+        assert result.output == "0.7679829666474438\n"
         m.assert_called_with("12345")
         api.similarity.assert_called_with(
             query_pair=(u"ウィンドウズ", "windows"),
@@ -285,7 +285,7 @@ Options:
             "windows"
         ])
 
-        assert result.output == "0.767982966647\n"
+        assert result.output == "0.7679829666474438\n"
         m.assert_called_with("12345")
         api.similarity.assert_called_with(
             query_pair=(u"ウィンドウズ", "windows"),

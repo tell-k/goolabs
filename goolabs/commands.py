@@ -8,6 +8,7 @@
 """
 from __future__ import division, print_function, absolute_import, unicode_literals  # NOQA
 
+import math
 import json
 import locale
 
@@ -104,7 +105,7 @@ def similarity(ctx, app_id, json_flag, **kwargs):
         click.echo(format_json(api.response.json()))
         return
 
-    click.echo(ret['score'])
+    click.echo("{0:.16f}".format(ret['score']))
 
 
 @main.command()
