@@ -1,6 +1,6 @@
 Goo labs API client for python. And provide some command line tools.
 
-|travis| |downloads| |version| |license|
+|travis| |coveralls| |downloads| |version| |license|
 
 .. contents::
    :local:

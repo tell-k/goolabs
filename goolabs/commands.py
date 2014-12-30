@@ -6,6 +6,7 @@
     :author: tell-k <ffk2005@gmail.com>
     :copyright: tell-k. All Rights Reserved.
 """
+from __future__ import division, print_function, absolute_import, unicode_literals  # NOQA
 
 import json
 import locale
@@ -158,6 +159,3 @@ def entity(ctx, app_id, sentence_file, json_flag, **kwargs):
 
     for ne in ret['ne_list']:
         click.echo(u",".join(ne))
-
-if __name__ == '__main__':
-    main()
