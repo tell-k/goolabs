@@ -416,6 +416,10 @@ Authors
 History
 =======
 
+0.1.1(Dec 31, 2014)
+---------------------
+* Add unit test for commandline tools.
+
 0.1.0(Dec 25, 2014)
 ---------------------
 * First release
