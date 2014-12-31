@@ -9,6 +9,7 @@
 from __future__ import division, print_function, absolute_import, unicode_literals  # NOQA
 
 import mock
+import codecs
 from click.testing import CliRunner
 
 
@@ -202,7 +203,6 @@ Options:
             "--request-id=req001",
             u"日本語"
         ])
-
         assert result.output == "日本語,名詞,ニホンゴ\n"
         m.assert_called_with("12345")
         api.morph.assert_called_with(
@@ -211,6 +211,33 @@ Options:
             request_id="req001",
             sentence=u'日本語'
         )
+
+    @mock.patch("goolabs.commands.GoolabsAPI")
+    def test_sentence_file(self, m):
+        api = m.return_value
+        api.morph.return_value = {
+            "word_list": [
+                [
+                    [u"日本語", u"名詞", u"ニホンゴ"],
+                ]
+            ],
+            "request_id": "labs.goo.ne.jp\t1419262824\t0"
+        }
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with codecs.open('sentence.txt', "w", "utf-8") as f:
+                f.write(u'日本語')
+
+            result = runner.invoke(self._get_target(),
+                                   ["--app-id=12345", u"--file=sentence.txt"])
+            assert result.output == "日本語,名詞,ニホンゴ\n"
+            m.assert_called_with("12345")
+            api.morph.assert_called_with(
+                pos_filter=None,
+                info_filter=None,
+                request_id=None,
+                sentence=u'日本語'
+            )
 
     @mock.patch("goolabs.commands.GoolabsAPI")
     def test_json(self, m):
@@ -374,6 +401,30 @@ Options:
         )
 
     @mock.patch("goolabs.commands.GoolabsAPI")
+    def test_sentence_file(self, m):
+        api = m.return_value
+        api.hiragana.return_value = {
+            "output_type": "hiragana",
+            "converted": "にほんご",
+            "request_id": "labs.goo.ne.jp\t1419263773\t0"
+        }
+
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with codecs.open('sentence.txt', "w", "utf-8") as f:
+                f.write(u'日本語')
+
+            result = runner.invoke(self._get_target(),
+                                   ["--app-id=12345", u"--file=sentence.txt"])
+            assert result.output == "にほんご\n"
+            m.assert_called_with("12345")
+            api.hiragana.assert_called_with(
+                sentence=u"日本語",
+                output_type="hiragana",
+                request_id=None,
+            )
+
+    @mock.patch("goolabs.commands.GoolabsAPI")
     def test_json(self, m):
         api = m.return_value
         api.response.json.return_value = {'dummy': 'dummydata'}
@@ -453,6 +504,31 @@ Options:
             class_filter="PSN|LOC",
             request_id="req001",
         )
+
+    @mock.patch("goolabs.commands.GoolabsAPI")
+    def test_sentence_file(self, m):
+        api = m.return_value
+        api.entity.return_value = {
+            "ne_list": [
+                ["鈴木", "PSN"],
+            ],
+            "request_id": "labs.goo.ne.jp\t1419264063\t0"
+        }
+
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with codecs.open('sentence.txt', "w", "utf-8") as f:
+                f.write(u'鈴木さん')
+
+            result = runner.invoke(self._get_target(),
+                                   ["--app-id=12345", "--file=sentence.txt"])
+            assert result.output == "鈴木,PSN\n"
+            m.assert_called_with("12345")
+            api.entity.assert_called_with(
+                sentence=u"鈴木さん",
+                class_filter=None,
+                request_id=None,
+            )
 
     @mock.patch("goolabs.commands.GoolabsAPI")
     def test_json(self, m):
