@@ -42,7 +42,7 @@ See also https://labs.goo.ne.jp/api/2014/334/
  # See sample response below.
  sample_response = api.morph(sentence=u"日本語を分析します。")
 
- # All the argments of this func.
+ # All the arguments of this func.
  api.morph(
         request_id="morph-req001",
         sentence=u"日本語を分析します。",
@@ -86,7 +86,7 @@ See also https://labs.goo.ne.jp/api/2014/330/
  # See sample response below.
  ret = api.similarity(query_pair=["windows", u"ウィンドウズ"])
 
- # All the argments of this func.
+ # All the arguments of this func.
  api.similarity(
         request_id="similarity-req001",
         query_pair=["windows", u"ウィンドウズ"]
@@ -119,7 +119,7 @@ See also https://labs.goo.ne.jp/api/2014/338/
  # See sample response below.
  ret = api.hiragana(sentence=u"漢字が混ざっている文章", output_type="hiragana")
 
- # All the argments of this func.
+ # All the arguments of this func.
  api.hiragana(
         request_id="hiragana-req001",
         sentence=u"漢字が混ざっている文章",
@@ -154,7 +154,7 @@ see also https://labs.goo.ne.jp/api/2014/336/.
  # See sample response below.
  ret = api.entity(sentence=u"鈴木さんがきょうの9時30分に横浜に行きます。")
 
- # All the argments of this func.
+ # All the arguments of this func.
  api.entity(
         request_id="entity-req001",
         sentence=u"鈴木さんがきょうの9時30分に横浜に行きます。"
