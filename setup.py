@@ -7,8 +7,6 @@ import re
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
-here = os.path.dirname(__file__)
-
 
 class PyTest(TestCommand):
     user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
@@ -27,6 +25,8 @@ class PyTest(TestCommand):
         import pytest
         errno = pytest.main(self.pytest_args)
         sys.exit(errno)
+
+here = os.path.dirname(__file__)
 
 with open(os.path.join(here, 'goolabs', '__init__.py'), 'r') as f:
     version = re.compile(
@@ -59,6 +59,7 @@ classifiers = [
     "Environment :: Console",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 2",
     "Programming Language :: Python :: 2.6",
     "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
@@ -82,7 +83,7 @@ setup(
     install_requires=requires,
     tests_require=tests_require,
     cmdclass={'test': PyTest},
-    packages=find_packages(),
+    packages=find_packages(exclude=["tests"]),
     entry_points=entry_points,
     license='MIT',
 )
