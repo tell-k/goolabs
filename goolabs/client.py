@@ -17,13 +17,11 @@ class GoolabsAPI(object):
     BASE_API_URL = "https://labs.goo.ne.jp/api/{0}"
     API_NAMES = ['morph', "similarity", "hiragana", "entity"]
 
-    def __init__(self, app_id, timeout=None, headers={}):
+    def __init__(self, app_id, **kwargs):
         self._app_id = app_id
-        self._timeout = timeout or 30
-        self._headers = {'content-type': 'application/json'}
-        self.response = None
-        if headers:
-            self._headers.update(headers)
+        self._req_args = {'timeout': 30, 'headers': {}}
+        self._req_args.update(kwargs)
+        self._req_args['headers'].update({'content-type': 'application/json'})
 
     def __getattr__(self, func):
         if func not in self.API_NAMES:
@@ -38,8 +36,7 @@ class GoolabsAPI(object):
             self.response = requests.post(
                 req_url,
                 data=json.dumps(payload),
-                timeout=self._timeout,
-                headers=self._headers
+                **self._req_args
             )
             self.response.raise_for_status()
             return self.response.json()

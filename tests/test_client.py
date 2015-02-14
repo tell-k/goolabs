@@ -193,5 +193,5 @@ class TestGoolabsAPI(object):
     def test_init(self):
 
         api = self._make_one("dummy", timeout=60, headers={'dummy': "dummy"})
-        assert api._timeout == 60
-        assert "dummy" in api._headers
+        assert api._req_args['timeout'] == 60
+        assert "dummy" in api._req_args['headers']

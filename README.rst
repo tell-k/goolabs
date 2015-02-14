@@ -1,6 +1,6 @@
 Goo labs API client for python. And provide some command line tools.
 
-|travis| |coveralls| |downloads| |version| |license|
+|travis| |coveralls| |downloads| |version| |license| |requires|
 
 .. contents::
    :local:
@@ -428,6 +428,7 @@ History
 ---------------------
 * First release
 
+
 .. |travis| image:: https://travis-ci.org/tell-k/goolabs.svg?branch=master
     :target: https://travis-ci.org/tell-k/goolabs
 
@@ -446,3 +447,8 @@ History
 .. |license| image:: https://pypip.in/license/goolabs/badge.svg
     :target: http://pypi.python.org/pypi/goolabs/
     :alt: license
+
+.. |requires| image:: https://requires.io/github/tell-k/goolabs/requirements.svg?branch=master
+    :target: https://requires.io/github/tell-k/goolabs/requirements/?branch=master
+    :alt: requirements status
+
