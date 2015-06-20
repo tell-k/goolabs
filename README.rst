@@ -440,7 +440,7 @@ History
     :target: http://pypi.python.org/pypi/goolabs/
     :alt: downloads
 
-.. |version| image:: https://img.shields.io/pypi/v/googlabs.svg
+.. |version| image:: https://img.shields.io/pypi/v/goolabs.svg
     :target: http://pypi.python.org/pypi/goolabs/
     :alt: latest version
 
