@@ -436,15 +436,15 @@ History
     :target: https://coveralls.io/r/tell-k/goolabs
     :alt: coveralls.io
 
-.. |downloads| image:: https://pypip.in/d/goolabs/badge.svg
+.. |downloads| image:: https://img.shields.io/pypi/dm/goolabs.svg
     :target: http://pypi.python.org/pypi/goolabs/
     :alt: downloads
 
-.. |version| image:: https://pypip.in/v/goolabs/badge.svg
+.. |version| image:: https://img.shields.io/pypi/v/googlabs.svg
     :target: http://pypi.python.org/pypi/goolabs/
     :alt: latest version
 
-.. |license| image:: https://pypip.in/license/goolabs/badge.svg
+.. |license| image:: https://img.shields.io/pypi/l/goolabs.svg
     :target: http://pypi.python.org/pypi/goolabs/
     :alt: license
 
