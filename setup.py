@@ -43,10 +43,13 @@ requires = [
 tests_require = [
     "pytest-cov",
     "pytest",
-    "mock",
     "testfixtures",
     "responses",
 ]
+if sys.version_info <= (2, 6):
+    tests_require.append("mock==1.0.1")
+else:
+    tests_require.append("mock")
 
 entry_points = {
     "console_scripts": [
