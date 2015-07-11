@@ -220,9 +220,9 @@ Sample response.
 .. code-block:: json
 
   {
-      'length': 60,
-      'summary': '黒の発色が綺麗です。機能は限られていますが、必要十分でしょう。価格も安いと思います。',
-      'request_id': 'shortsum-req001'
+    "length": 60,
+    "summary": "黒の発色が綺麗です。機能は限られていますが、必要十分でしょう。価格も安いと思います。",
+    "request_id": "shortsum-req001"
   }
 
 
