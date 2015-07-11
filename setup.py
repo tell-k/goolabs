@@ -80,6 +80,7 @@ setup(
     author="tell-k",
     author_email="ffk2005 at gmail.com",
     classifiers=classifiers,
+    keywords=['goolabs', 'web', 'api', 'client'],
     install_requires=requires,
     tests_require=tests_require,
     cmdclass={'test': PyTest},

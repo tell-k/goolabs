@@ -14,13 +14,17 @@ Features
 Required
 ========
 * You need to get **app id** at `Goo labs website <https://labs.goo.ne.jp/apiregister/>`_  in order to use this library.
- 
+
 Set up
 ======
 
 Make environment with pip::
 
-  $ pip install goolabs
+ $ pip install goolabs
+
+For Max OS X user. If you want to use command line tool only, you can install from homebrew::
+
+ $ brew install goolabs
 
 Usage
 =====
@@ -38,7 +42,7 @@ See also https://labs.goo.ne.jp/api/2014/334/
 
  app_id = "xxxxxxxxxxxxxxxxxxxx"
  api = GoolabsAPI(app_id)
- 
+
  # See sample response below.
  sample_response = api.morph(sentence=u"日本語を分析します。")
 
@@ -57,14 +61,14 @@ Sample response.
  {
    "word_list": [
      [
-       [ "日本語", "名詞", "ニホンゴ" ], 
-       [ "を", "格助詞", "ヲ" ], 
-       [ "分析", "名詞", "ブンセキ" ], 
-       [ "し", "動詞活用語尾", "シ" ], 
-       [ "ます", "動詞接尾辞", "マス" ], 
+       [ "日本語", "名詞", "ニホンゴ" ],
+       [ "を", "格助詞", "ヲ" ],
+       [ "分析", "名詞", "ブンセキ" ],
+       [ "し", "動詞活用語尾", "シ" ],
+       [ "ます", "動詞接尾辞", "マス" ],
        [ "。", "句点", "＄" ]
      ]
-   ], 
+   ],
    "request_id": "labs.goo.ne.jp\t1419262824\t0"
  }
 
@@ -82,7 +86,7 @@ See also https://labs.goo.ne.jp/api/2014/330/
 
  app_id = "xxxxxxxxxxxxxxxxxxxx"
  api = GoolabsAPI(app_id)
- 
+
  # See sample response below.
  ret = api.similarity(query_pair=["windows", u"ウィンドウズ"])
 
@@ -97,7 +101,7 @@ Sample response.
 .. code-block:: json
 
   {
-    "score": 0.7679829666474438, 
+    "score": 0.7679829666474438,
     "request_id": "labs.goo.ne.jp\t1419263621\t0"
   }
 
@@ -115,7 +119,7 @@ See also https://labs.goo.ne.jp/api/2014/338/
 
  app_id = "xxxxxxxxxxxxxxxxxxxx"
  api = GoolabsAPI(app_id)
- 
+
  # See sample response below.
  ret = api.hiragana(sentence=u"漢字が混ざっている文章", output_type="hiragana")
 
@@ -131,8 +135,8 @@ Sample response.
 .. code-block:: json
 
  {
-   "output_type": "hiragana", 
-   "converted": "かんじが まざっている ぶんしょう", 
+   "output_type": "hiragana",
+   "converted": "かんじが まざっている ぶんしょう",
    "request_id": "labs.goo.ne.jp\t1419263773\t0"
  }
 
@@ -150,7 +154,7 @@ see also https://labs.goo.ne.jp/api/2014/336/.
 
  app_id = "xxxxxxxxxxxxxxxxxxxx"
  api = GoolabsAPI(app_id)
- 
+
  # See sample response below.
  ret = api.entity(sentence=u"鈴木さんがきょうの9時30分に横浜に行きます。")
 
@@ -167,13 +171,60 @@ Sample response.
 
   {
     "ne_list": [
-      [ "鈴木", "PSN" ], 
-      [ "きょう", "DAT" ], 
-      [ "9時30分", "TIM" ], 
+      [ "鈴木", "PSN" ],
+      [ "きょう", "DAT" ],
+      [ "9時30分", "TIM" ],
       [ "横浜", "LOC" ]
-    ], 
+    ],
     "request_id": "labs.goo.ne.jp\t1419264063\t0"
   }
+
+shortsum
+--------------------
+
+Summarizes the sent-in Japanese reviews into a short summary.
+
+see also https://labs.goo.ne.jp/api/2015/1150/.
+
+.. code-block:: python
+
+ from goolabs import GoolabsAPI
+
+ app_id = "xxxxxxxxxxxxxxxxxxxx"
+ api = GoolabsAPI(app_id)
+
+ # See sample response below.
+ ret = api.shortsum(
+      review_list=[
+         "機能は限られていますが、必要十分でしょう。",
+         "価格も安いと思います。お店の対応もよかったです。",
+         "このシリーズを買うの3台目になりました。黒の発色が綺麗です。"
+         "値段を考えれば十分すぎる性能で",
+      ]
+ )
+
+ # All the arguments of this func.
+ api.shortsum(
+      request_id="shortsum-req001",
+      review_list=[
+         "機能は限られていますが、必要十分でしょう。",
+         "価格も安いと思います。お店の対応もよかったです。",
+         "このシリーズを買うの3台目になりました。黒の発色が綺麗です。"
+         "値段を考えれば十分すぎる性能で",
+      ],
+      length=60  # 60 or 120 or 180
+  )
+
+Sample response.
+
+.. code-block:: json
+
+  {
+      'length': 60,
+      'summary': '黒の発色が綺麗です。機能は限られていますが、必要十分でしょう。価格も安いと思います。',
+      'request_id': 'shortsum-req001'
+  }
+
 
 Other tips
 --------------------
@@ -223,7 +274,12 @@ You may pass the App id every time you use it, but it's not recommended.
 
 .. code-block:: bash
 
- $ goolabs morph --app-id xxxxx 日本語を分析します。 
+ $ goolabs morph --app-id xxxxx 日本語を分析します。
+
+Homebrew
+----------
+
+
 
 morph
 --------------------
@@ -248,7 +304,7 @@ Sample usage.
 
 .. code-block:: bash
 
-  $ goolabs morph 日本語を分析します。 
+  $ goolabs morph 日本語を分析します。
   日本語,名詞,ニホンゴ
   を,格助詞,ヲ
   分析,名詞,ブンセキ
@@ -268,12 +324,12 @@ Sample usage.
     "word_list": [
       [
         [
-          "日本語", 
-          "名詞", 
+          "日本語",
+          "名詞",
           "ニホンゴ"
         ]
       ]
-    ], 
+    ],
     "request_id": "req001"
   }
 
@@ -303,7 +359,7 @@ Sample usage.
   # get raw json.
   $ goolabs similarity --json --request-id req002 ウィンドウズ windows
   {
-    "score": 0.7679829666474438, 
+    "score": 0.7679829666474438,
     "request_id": "req002"
   }
 
@@ -333,7 +389,7 @@ Sample usage.
   にほんご
 
   # convert to Katakana
-  $ goolabs hiragana --output-type katakana 日本語 
+  $ goolabs hiragana --output-type katakana 日本語
   ニホンゴ
 
   # specify a file as an alternative to the sentence
@@ -342,8 +398,8 @@ Sample usage.
   # get raw json
   $ goolabs hiragana --json --request-id req003 日本語
   {
-    "output_type": "hiragana", 
-    "converted": "にほんご", 
+    "output_type": "hiragana",
+    "converted": "にほんご",
     "request_id": "req003"
   }
 
@@ -375,7 +431,7 @@ Sample usage.
   豊洲,LOC
 
   # more option
-  $ goolabs entity --class-filter PSN,LOC 佐藤氏、2014年12月に足の小指骨折し豊洲の病院へ 
+  $ goolabs entity --class-filter PSN,LOC 佐藤氏、2014年12月に足の小指骨折し豊洲の病院へ
 
   # specify a file as an alternative to the sentence
   $ goolabs entity --file sentence.txt
@@ -385,11 +441,50 @@ Sample usage.
   {
     "ne_list": [
       [
-        "佐藤", 
+        "佐藤",
         "PSN"
       ]
-    ], 
+    ],
     "request_id": "req004"
+  }
+
+shortsum
+--------------------
+
+.. code-block:: bash
+
+  $ goolabs shortsum --help
+  Usage: goolabs shortsum [OPTIONS] [REVIEW]
+
+    Summarize reviews into a short summary.
+
+  Options:
+    -a, --app-id TEXT
+    --length [60|120|180]
+    -r, --request-id TEXT
+    -f, --file FILENAME
+    -j, --json / --no-json
+    --help                  Show this message and exit.
+
+Sample usage.
+
+.. code-block:: bash
+
+  $ goolabs shortsum このシリーズを買うの3台目になりました。黒の発色が綺麗です
+  黒の発色が綺麗です。
+
+  # more option
+  $ goolabs shortsum --length 180 黒の発色が綺麗です...
+
+  # specify a file as an alternative to the review
+  $ goolabs shortsum --file review.txt
+
+  # get raw json
+  $ goolabs entity --json --request-id req005 このシリーズを買うの3台目になりました。黒の発色が綺麗です
+  {
+    "length": 120,
+    "summary": "黒の発色が綺麗です。",
+    "request_id": "req005"
   }
 
 
@@ -415,6 +510,11 @@ Authors
 
 History
 =======
+
+0.2.0(Jul 12, 2015)
+---------------------
+* Add new api "shortsum".
+* improved unit test code
 
 0.1.2(Jan 1, 2015)
 ---------------------

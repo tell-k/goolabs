@@ -15,7 +15,7 @@ import requests
 class GoolabsAPI(object):
 
     BASE_API_URL = "https://labs.goo.ne.jp/api/{0}"
-    API_NAMES = ['morph', "similarity", "hiragana", "entity"]
+    API_NAMES = ['morph', "similarity", "hiragana", "entity", "shortsum"]
 
     def __init__(self, app_id, **kwargs):
         self._app_id = app_id
