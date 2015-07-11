@@ -120,6 +120,7 @@ class TestCleanReview(object):
         excpected += 'REVIEW argument or --file option.'
         assert excpected == str(e.value)
 
+
 class TestCleanLength(object):
 
     def _call_fut(self, length):
