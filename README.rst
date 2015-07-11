@@ -258,7 +258,9 @@ Command line tool
     entity      Extract unique representation from sentence.
     hiragana    Convert the Japanese to Hiragana or Katakana.
     morph       Morphological analysis for Japanese.
+    shortsum    Summarize reviews into a short summary.
     similarity  Scoring the similarity of two words.
+
 
 Set environment variable GOOLABS_APP_ID
 ----------------------------------------
