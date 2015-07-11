@@ -54,6 +54,9 @@ See also https://labs.goo.ne.jp/api/2014/334/
         pos_filter=u"名詞|格助詞|動詞活用語尾|動詞接尾辞|句点",
         )
 
+ # Possible parts of speech, please refer to the following URL.
+ # https://labs.goo.ne.jp/api/2015/1158/
+
 Sample response.
 
 .. code-block:: json
