@@ -281,10 +281,6 @@ You may pass the App id every time you use it, but it's not recommended.
 
  $ goolabs morph --app-id xxxxx 日本語を分析します。
 
-Homebrew
-----------
-
-
 
 morph
 --------------------
