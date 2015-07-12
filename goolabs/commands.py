@@ -184,7 +184,7 @@ def entity(ctx, app_id, sentence_file, json_flag, **kwargs):
 @main.command()
 @click.argument('review', required=False, type=text)
 @click.option('--app-id', '-a', 'app_id', envvar='GOOLABS_APP_ID', type=text)
-@click.option('--length', type=click.Choice(['60', '120', '180']))
+@click.option('--length', '-l', type=click.Choice(['60', '120', '180']))
 @click.option('--request-id', '-r', 'request_id', type=text)
 @click.option('--file', '-f', 'review_file', type=click.File('rb'))
 @click.option('--json/--no-json', '-j', 'json_flag', default=False)
