@@ -461,7 +461,7 @@ shortsum
 
   Options:
     -a, --app-id TEXT
-    --length [60|120|180]
+    -l, --length [60|120|180]
     -r, --request-id TEXT
     -f, --file FILENAME
     -j, --json / --no-json
