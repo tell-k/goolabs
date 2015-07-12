@@ -512,6 +512,10 @@ Authors
 History
 =======
 
+0.2.1(Jul 12, 2015)
+---------------------
+* Add "-l" option for "goolabs shortsum" command.
+
 0.2.0(Jul 12, 2015)
 ---------------------
 * Add new api "shortsum".
