@@ -48,7 +48,7 @@ tests_require = [
 ]
 
 if sys.version_info < (2, 7):
-    tests_require.append("mock=<1.0.1")
+    tests_require.append("mock==1.0.1")
 else:
     tests_require.append("mock")
 
