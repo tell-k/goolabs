@@ -309,6 +309,7 @@ Command line tool
   Commands:
     entity      Extract unique representation from sentence.
     hiragana    Convert the Japanese to Hiragana or Katakana.
+    keyword     Extract "keywords" from an input document.
     morph       Morphological analysis for Japanese.
     shortsum    Summarize reviews into a short summary.
     similarity  Scoring the similarity of two words.
