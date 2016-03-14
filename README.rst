@@ -34,7 +34,7 @@ morph
 
 Morphological analysis for Japanese.
 
-See also https://labs.goo.ne.jp/api/2014/334/
+See also https://labs.goo.ne.jp/api/2015/1302/
 
 .. code-block:: python
 
@@ -81,7 +81,7 @@ similarity
 
 Scoring the similarity of two words.
 
-See also https://labs.goo.ne.jp/api/2014/330/
+See also https://labs.goo.ne.jp/api/2015/1295/
 
 .. code-block:: python
 
@@ -114,7 +114,7 @@ hiragana
 
 Convert the Japanese to Hiragana or Katakana.
 
-See also https://labs.goo.ne.jp/api/2014/338/
+See also https://labs.goo.ne.jp/api/2015/1293/
 
 .. code-block:: python
 
@@ -149,7 +149,7 @@ entitiy
 
 Extract the unique representation from sentence.
 
-see also https://labs.goo.ne.jp/api/2014/336/.
+see also https://labs.goo.ne.jp/api/2015/1299/.
 
 .. code-block:: python
 
@@ -187,7 +187,7 @@ shortsum
 
 Summarizes the sent-in Japanese reviews into a short summary.
 
-see also https://labs.goo.ne.jp/api/2015/1150/.
+see also https://labs.goo.ne.jp/api/2015/1305/
 
 .. code-block:: python
 
@@ -227,6 +227,55 @@ Sample response.
     "summary": "黒の発色が綺麗です。機能は限られていますが、必要十分でしょう。価格も安いと思います。",
     "request_id": "shortsum-req001"
   }
+
+keyword
+--------------------
+
+Extracts "Japanese keywords", such as person names, location names, and so on,
+from an input document consisting of a title and a body.
+
+see also https://labs.goo.ne.jp/api/2015/1325/
+
+.. code-block:: python
+
+ from goolabs import GoolabsAPI
+
+ app_id = "xxxxxxxxxxxxxxxxxxxx"
+ api = GoolabsAPI(app_id)
+
+ # See sample response below.
+ ret = api.keyword(
+     title="「和」をコンセプトとする 匿名性コミュニケーションサービス「MURA」",
+     body="NTTレゾナント株式会社（本社：東京都港区、代表取締役社長：若井 昌宏",
+ )
+
+ # All the arguments of this func.
+ api.keyword(
+     request_id="keyword-req001",
+     title="「和」をコンセプトとする 匿名性コミュニケーションサービス「MURA」",
+     body="NTTレゾナント株式会社（本社：東京都港区、代表取締役社長：若井 昌宏",
+     max_num=10,
+     forcus="ORG",
+ )
+
+Sample response.
+
+.. code-block:: json
+
+ {
+   "keywords": [
+     {"和": 0.5893},
+     {"コンセプト": 0.5893},
+     {"匿名性": 0.5893},
+     {"コミュニケーションサービス": 0.5893},
+     {"MURA": 0.5893},
+     {"NTTレ ゾナント株式会社": 0.35},
+     {"本社": 0.35}, {"東京都港区": 0.35},
+     {"代表取締役社長": 0.35},
+     {"若井": 0.35}
+   ],
+   "request_id": "labs.goo.ne.jp\t1457928295\t0"
+ }
 
 
 Other tips
@@ -481,13 +530,59 @@ Sample usage.
   $ goolabs shortsum --file review.txt
 
   # get raw json
-  $ goolabs entity --json --request-id req005 このシリーズを買うの3台目になりました。黒の発色が綺麗です
+  $ goolabs shortsum --json --request-id req005 このシリーズを買うの3台目になりました。黒の発色が綺麗です
   {
     "length": 120,
     "summary": "黒の発色が綺麗です。",
     "request_id": "req005"
   }
 
+keyword
+--------------------
+
+.. code-block:: bash
+
+  $ goolabs keyword --help
+  Usage: goolabs keyword [OPTIONS] TITLE [BODY]
+
+    Extract "keywords" from an input document.
+
+  Options:
+    -a, --app-id TEXT
+    -m, --max_num INTEGER
+    -fo, --forcus [ORG|PSN|LOC]
+    -r, --request-id TEXT
+    -f, --file FILENAME
+    -j, --json / --no-json
+    --help                       Show this message and exit.
+
+Sample usage.
+
+.. code-block:: bash
+
+  $ goolabs keyword "匿名性コミュニケーションサービス「MURA」" "NTTレゾナント株式会社"
+  匿名性,0.6
+  コミュニケーションサービス,0.6
+  MURA,0.6
+  NTTレゾナント株式会社,0.4
+
+  # more option
+  $ goolabs keyword --max_num 2 --forcus ORG "匿名性コミュニケーションサービス「MURA」" "NTTレゾナント株式会社"
+
+  # specify a file as an alternative to the body
+  $ goolabs keyword  --file body.txt "匿名性コミュニケーションサービス「MURA」"
+
+  # get raw json
+  $ goolabs keyword --json --request-id req006 "匿名性コミュニケーションサービス「MURA」" "NTTレゾナント株式会社"
+  {
+    "keywords": [
+      { "匿名性": 0.6 },
+      { "コミュニケーションサービス": 0.6 },
+      { "MURA": 0.6 },
+      { "NTTレゾナント株式会社": 0.4 }
+    ],
+    "request_id": "req006"
+  }
 
 Python Support
 ==============
@@ -511,6 +606,10 @@ Authors
 
 History
 =======
+
+0.3.0(Mar 14, 2016)
+---------------------
+* Add new api "keyword".
 
 0.2.2(Jul 12, 2015)
 ---------------------

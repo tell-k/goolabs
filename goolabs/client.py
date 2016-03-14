@@ -6,7 +6,7 @@
     :author: tell-k <ffk2005@gmail.com>
     :copyright: tell-k. All Rights Reserved.
 """
-from __future__ import division, print_function, absolute_import, unicode_literals  # NOQA
+from __future__ import division, print_function, absolute_import  # NOQA
 
 import json
 import requests
@@ -14,8 +14,9 @@ import requests
 
 class GoolabsAPI(object):
 
-    BASE_API_URL = "https://labs.goo.ne.jp/api/{0}"
-    API_NAMES = ['morph', "similarity", "hiragana", "entity", "shortsum"]
+    BASE_API_URL = 'https://labs.goo.ne.jp/api/{0}'
+    API_NAMES = ['morph', 'similarity', 'hiragana',
+                 'entity', 'shortsum', 'keyword']
 
     def __init__(self, app_id, **kwargs):
         self._app_id = app_id
@@ -26,13 +27,13 @@ class GoolabsAPI(object):
     def __getattr__(self, func):
         if func not in self.API_NAMES:
             raise AttributeError(
-                "Can't access or call this attribute '{0}'".format(func))
+                'Cannot access or call this attribute "{0}"'.format(func))
 
         req_url = self.BASE_API_URL.format(func)
 
         def inner_func(**kwargs):
             payload = dict([(k, v) for k, v in kwargs.items() if v])
-            payload.update({"app_id": self._app_id})
+            payload.update({'app_id': self._app_id})
             self.response = requests.post(
                 req_url,
                 data=json.dumps(payload),

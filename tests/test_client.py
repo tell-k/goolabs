@@ -6,7 +6,7 @@
     :author: tell-k <ffk2005@gmail.com>
     :copyright: tell-k. All Rights Reserved.
 """
-from __future__ import division, print_function, absolute_import, unicode_literals  # NOQA
+from __future__ import division, print_function, absolute_import  # NOQA
 import json
 
 import pytest
@@ -56,16 +56,16 @@ class TestGoolabsAPI(object):
     @responses.activate
     def test_morph(self):
         expected = {
-            'pos_filter': '名詞|格助詞|動詞活用語尾|動詞接尾辞|句点',
+            'pos_filter': u'名詞|格助詞|動詞活用語尾|動詞接尾辞|句点',
             'info_filter': 'form|pos|read',
             'word_list': [
                 [
-                    ['日本語', '名詞', 'ニホンゴ'],
-                    ['を', '格助詞', 'ヲ'],
-                    ['分析', '名詞', 'ブンセキ'],
-                    ['し', '動詞活用語尾', 'シ'],
-                    ['ます', '動詞接尾辞', 'マス'],
-                    ['。', '句点', '＄']
+                    [u'日本語', u'名詞', u'ニホンゴ'],
+                    [u'を', u'格助詞', u'ヲ'],
+                    [u'分析', u'名詞', u'ブンセキ'],
+                    [u'し', u'動詞活用語尾', u'シ'],
+                    [u'ます', u'動詞接尾辞', u'マス'],
+                    [u'。', u'句点', u'＄']
                 ]
             ],
             'request_id': 'morph-req001'
@@ -81,9 +81,9 @@ class TestGoolabsAPI(object):
         api = self._make_one(self.app_id)
         actual = api.morph(
             request_id='morph-req001',
-            sentence='日本語を分析します。',
-            pos_filter='名詞|格助詞|動詞活用語尾|動詞接尾辞|句点',
-            info_filter='form|pos|read'
+            sentence=u'日本語を分析します。',
+            pos_filter=u'名詞|格助詞|動詞活用語尾|動詞接尾辞|句点',
+            info_filter=u'form|pos|read'
         )
         assert expected == actual
 
@@ -106,7 +106,7 @@ class TestGoolabsAPI(object):
         api = self._make_one(self.app_id)
         actual = api.similarity(
             request_id='similarity-req001',
-            query_pair=['windows', 'ウィンドウズ']
+            query_pair=[u'windows', u'ウィンドウズ']
         )
         assert expected == actual
 
@@ -115,7 +115,7 @@ class TestGoolabsAPI(object):
 
         expected = {
             'output_type': 'hiragana',
-            'converted': 'かんじが まざっている ぶんしょう',
+            'converted': u'かんじが まざっている ぶんしょう',
             'request_id': 'hiragana-req001'
         }
 
@@ -130,7 +130,7 @@ class TestGoolabsAPI(object):
         api = self._make_one(self.app_id)
         actual = api.hiragana(
             request_id='hiragana-req001',
-            sentence='漢字が混ざっている文章',
+            sentence=u'漢字が混ざっている文章',
             output_type='hiragana'
         )
         assert expected == actual
@@ -140,10 +140,10 @@ class TestGoolabsAPI(object):
         expected = {
             'class_filter': 'ART|ORG|PSN|LOC|DAT|TIM',
             'ne_list': [
-                ['鈴木', 'PSN'],
-                ['きょう', 'DAT'],
-                ['9時30分', 'TIM'],
-                ['横浜', 'LOC']
+                [u'鈴木', 'PSN'],
+                [u'きょう', 'DAT'],
+                [u'9時30分', 'TIM'],
+                [u'横浜', 'LOC']
             ],
             'request_id': 'entity-req001'
         }
@@ -159,7 +159,7 @@ class TestGoolabsAPI(object):
         api = self._make_one(self.app_id)
         actual = api.entity(
             request_id='entity-req001',
-            sentence='鈴木さんがきょうの9時30分に横浜に行きます。',
+            sentence=u'鈴木さんがきょうの9時30分に横浜に行きます。',
             class_filter='ART|ORG|PSN|LOC|DAT|TIM',
         )
         assert expected == actual
@@ -170,8 +170,8 @@ class TestGoolabsAPI(object):
         expected = {
             'length': 60,
             'summary': ''.join([
-                '黒の発色が綺麗です。機能は限られていますが、',
-                '必要十分でしょう。価格も安いと思います。'
+                u'黒の発色が綺麗です。機能は限られていますが、',
+                u'必要十分でしょう。価格も安いと思います。'
             ]),
             'request_id': 'shortsum-req001'
         }
@@ -188,12 +188,41 @@ class TestGoolabsAPI(object):
         actual = api.shortsum(
             request_id='shortsum-req001',
             review_list=[
-                '機能は限られていますが、必要十分でしょう。',
-                '価格も安いと思います。お店の対応もよかったです。',
-                'このシリーズを買うの3台目になりました。黒の発色が綺麗です。',
-                '値段を考えれば十分すぎる性能でしょう。',
+                u'機能は限られていますが、必要十分でしょう。',
+                u'価格も安いと思います。お店の対応もよかったです。',
+                u'このシリーズを買うの3台目になりました。黒の発色が綺麗です。',
+                u'値段を考えれば十分すぎる性能でしょう。',
             ],
             length=60  # 60/120/180
+        )
+        assert expected == actual
+
+    @responses.activate
+    def test_keyword(self):
+        expected = {
+            'keywords': [
+                {u'匿名性': 0.6},
+                {u'コミュニケーションサービス': 0.6},
+                {u'MURA': 0.6},
+            ],
+            'request_id': 'keyword-req001'
+        }
+
+        responses.add(
+            responses.POST,
+            'https://labs.goo.ne.jp/api/keyword',
+            body=json.dumps(expected),
+            status=200,
+            content_type='application/json'
+        )
+
+        api = self._make_one(self.app_id)
+        actual = api.keyword(
+            request_id='keyword-req001',
+            title=u'匿名性コミュニケーションサービス「MURA」',
+            body=u'NTTレゾナント株式会社',
+            max_num=3,
+            forcus=u'ORG',  # ORG/PSN/LOC
         )
         assert expected == actual
 
@@ -220,7 +249,7 @@ class TestGoolabsAPI(object):
         with pytest.raises(AttributeError) as e:
             api.non_exists_api()
 
-        emsg = "Can't access or call this attribute 'non_exists_api'"
+        emsg = 'Cannot access or call this attribute "non_exists_api"'
         assert str(e.value) == emsg
 
     def test_init(self):

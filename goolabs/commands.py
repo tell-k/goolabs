@@ -6,7 +6,7 @@
     :author: tell-k <ffk2005@gmail.com>
     :copyright: tell-k. All Rights Reserved.
 """
-from __future__ import division, print_function, absolute_import, unicode_literals  # NOQA
+from __future__ import division, print_function, absolute_import  # NOQA
 
 import json
 import locale
@@ -49,6 +49,15 @@ def clean_review(review, review_file):
     return review.split('\n')
 
 
+def clean_body(body, body_file):
+    if not body and not body_file:
+        raise click.UsageError('Missing body. You must set'
+                               ' BODY argument or --file option.')
+    if not body and body_file:
+        body = text(body_file.read())
+    return body
+
+
 def clean_length(length):
     if length is None:
         return None
@@ -78,7 +87,7 @@ def main(ctx):
 @click.option('--info-filter', '-i', 'info_filter',
               type=text, help='form,pos,read')
 @click.option('--pos-filter', '-p', 'pos_filter',
-              type=text, help='名刺,動詞活用語尾,句点..etc')
+              type=text, help=u'名刺,動詞活用語尾,句点..etc')
 @click.option('--file', '-f', 'sentence_file', type=click.File('rb'))
 @click.option('--json/--no-json', '-j', 'json_flag', default=False)
 @click.pass_context
@@ -204,3 +213,31 @@ def shortsum(ctx, app_id, review_file, json_flag, **kwargs):
         return
 
     click.echo(ret['summary'])
+
+
+@main.command()
+@click.argument('title', required=True, type=text)
+@click.argument('body', required=False, type=text)
+@click.option('--app-id', '-a', 'app_id', envvar='GOOLABS_APP_ID', type=text)
+@click.option('--max_num', '-m', type=click.INT)
+@click.option('--forcus', '-fo', type=click.Choice(['ORG', 'PSN', 'LOC']))
+@click.option('--request-id', '-r', 'request_id', type=text)
+@click.option('--file', '-f', 'body_file', type=click.File('rb'))
+@click.option('--json/--no-json', '-j', 'json_flag', default=False)
+@click.pass_context
+def keyword(ctx, app_id, body_file, json_flag, **kwargs):
+    """Extract "keywords" from an input document. """
+
+    app_id = clean_app_id(app_id)
+    kwargs['body'] = clean_body(kwargs.pop('body'), body_file)
+
+    api = GoolabsAPI(app_id)
+    ret = api.keyword(**kwargs)
+
+    if json_flag:
+        click.echo(format_json(api.response.json()))
+        return
+
+    for k in ret['keywords']:
+        for keyword, score in k.items():
+            click.echo(u'{},{}'.format(keyword, score))

@@ -6,7 +6,7 @@
     :author: tell-k <ffk2005@gmail.com>
     :copyright: tell-k. All Rights Reserved.
 """
-from __future__ import division, print_function, absolute_import, unicode_literals  # NOQA
+from __future__ import division, print_function, absolute_import  # NOQA
 
 import mock
 import codecs
@@ -121,6 +121,43 @@ class TestCleanReview(object):
         assert excpected == str(e.value)
 
 
+class TestCleanBody(object):
+
+    def _call_fut(self, body, body_file):
+        from goolabs.commands import clean_body
+        return clean_body(body, body_file)
+
+    def test_body(self):
+        assert 'body1\nbody2' == self._call_fut(
+            body='body1\nbody2', body_file=None)
+        assert 'body1\nbody2' == self._call_fut(
+            body='body1\nbody2', body_file='body_file')
+
+    def test_body_file(self):
+        import six
+
+        body_file = six.StringIO()
+        body_file.write('body1\nbody2')
+
+        body_file.seek(0)
+        assert 'body1\nbody2' == self._call_fut(
+            body='', body_file=body_file)
+
+        body_file.seek(0)
+        assert 'body1\nbody2' == self._call_fut(
+            body=None, body_file=body_file)
+
+    def test_raise_error(self):
+        import click
+        import pytest
+        with pytest.raises(click.UsageError) as e:
+            self._call_fut(body=None, body_file=None)
+
+        excpected = 'Missing body. You must set '
+        excpected += 'BODY argument or --file option.'
+        assert excpected == str(e.value)
+
+
 class TestCleanLength(object):
 
     def _call_fut(self, length):
@@ -178,7 +215,7 @@ class TestMainCommand(object):
     def test_help(self):
         runner = CliRunner()
         result = runner.invoke(self._get_target())
-        expected = """Usage: main [OPTIONS] COMMAND [ARGS]...
+        expected = u"""Usage: main [OPTIONS] COMMAND [ARGS]...
 
   Command line tools for Goo labs API(https://labs.goo.ne.jp/api/).
 
@@ -189,6 +226,7 @@ Options:
 Commands:
   entity      Extract unique representation from sentence.
   hiragana    Convert the Japanese to Hiragana or Katakana.
+  keyword     Extract "keywords" from an input document.
   morph       Morphological analysis for Japanese.
   shortsum    Summarize reviews into a short summary.
   similarity  Scoring the similarity of two words.
@@ -214,7 +252,7 @@ class TestMorphCommand(object):
     def test_help(self):
         runner = CliRunner()
         result = runner.invoke(self._get_target(), ['--help'])
-        expected = """Usage: morph [OPTIONS] [SENTENCE]
+        expected = u"""Usage: morph [OPTIONS] [SENTENCE]
 
   Morphological analysis for Japanese.
 
@@ -235,15 +273,15 @@ Options:
         api.morph.return_value = {
             'word_list': [
                 [
-                    ['日本語', '名詞', 'ニホンゴ'],
+                    [u'日本語', u'名詞', u'ニホンゴ'],
                 ]
             ],
             'request_id': 'labs.goo.ne.jp\t1419262824\t0'
         }
 
         runner = CliRunner()
-        result = runner.invoke(self._get_target(), ['--app-id=12345', '日本語'])
-        assert result.output == '日本語,名詞,ニホンゴ\n'
+        result = runner.invoke(self._get_target(), ['--app-id=12345', u'日本語'])
+        assert result.output == u'日本語,名詞,ニホンゴ\n'
         m.assert_called_with('12345')
         api.morph.assert_called_with(
             pos_filter=None,
@@ -258,7 +296,7 @@ Options:
         api.morph.return_value = {
             'word_list': [
                 [
-                    ['日本語', '名詞', 'ニホンゴ'],
+                    [u'日本語', u'名詞', u'ニホンゴ'],
                 ]
             ],
             'request_id': 'labs.goo.ne.jp\t1419262824\t0'
@@ -268,14 +306,14 @@ Options:
         result = runner.invoke(self._get_target(), [
             '--app-id=12345',
             '--info-filter=form,pos,read',
-            '--pos-filter=名詞,格助詞,句点',
+            u'--pos-filter=名詞,格助詞,句点',
             '--request-id=req001',
-            '日本語'
+            u'日本語'
         ])
-        assert result.output == '日本語,名詞,ニホンゴ\n'
+        assert result.output == u'日本語,名詞,ニホンゴ\n'
         m.assert_called_with('12345')
         api.morph.assert_called_with(
-            pos_filter='名詞|格助詞|句点',
+            pos_filter=u'名詞|格助詞|句点',
             info_filter='form|pos|read',
             request_id='req001',
             sentence=u'日本語'
@@ -287,7 +325,7 @@ Options:
         api.morph.return_value = {
             'word_list': [
                 [
-                    ['日本語', '名詞', 'ニホンゴ'],
+                    [u'日本語', u'名詞', u'ニホンゴ'],
                 ]
             ],
             'request_id': 'labs.goo.ne.jp\t1419262824\t0'
@@ -300,7 +338,7 @@ Options:
             result = runner.invoke(self._get_target(),
                                    ['--app-id=12345', '--file=sentence.txt'])
 
-        assert result.output == '日本語,名詞,ニホンゴ\n'
+        assert result.output == u'日本語,名詞,ニホンゴ\n'
         m.assert_called_with('12345')
         api.morph.assert_called_with(
             pos_filter=None,
@@ -317,7 +355,8 @@ Options:
         runner = CliRunner()
         result = runner.invoke(self._get_target(), [
             '--app-id=12345',
-            '--json', '日本語'
+            '--json',
+            u'日本語'
         ])
         m.assert_called_with('12345')
         api.morph.assert_called_with(
@@ -326,7 +365,7 @@ Options:
             request_id=None,
             sentence=u'日本語'
         )
-        assert result.output == """{
+        assert result.output == u"""{
   "dummy": "dummydata"
 }
 """
@@ -364,13 +403,13 @@ Options:
         runner = CliRunner()
         result = runner.invoke(self._get_target(), [
             '--app-id=12345',
-            'ウィンドウズ',
+            u'ウィンドウズ',
             'windows'
         ])
         assert result.output == '0.7679829666474438\n'
         m.assert_called_with('12345')
         api.similarity.assert_called_with(
-            query_pair=('ウィンドウズ', 'windows'),
+            query_pair=(u'ウィンドウズ', 'windows'),
             request_id=None,
         )
 
@@ -386,14 +425,14 @@ Options:
         result = runner.invoke(self._get_target(), [
             '--app-id=12345',
             '--request-id=req001',
-            'ウィンドウズ',
+            u'ウィンドウズ',
             'windows'
         ])
 
         assert result.output == '0.7679829666474438\n'
         m.assert_called_with('12345')
         api.similarity.assert_called_with(
-            query_pair=('ウィンドウズ', 'windows'),
+            query_pair=(u'ウィンドウズ', 'windows'),
             request_id='req001',
         )
 
@@ -406,12 +445,12 @@ Options:
         result = runner.invoke(self._get_target(), [
             '--app-id=12345',
             '--json',
-            'ウィンドウズ',
+            u'ウィンドウズ',
             'windows'
         ])
         m.assert_called_with('12345')
         api.similarity.assert_called_with(
-            query_pair=('ウィンドウズ', 'windows'),
+            query_pair=(u'ウィンドウズ', 'windows'),
             request_id=None,
         )
         assert result.output == """{
@@ -448,16 +487,16 @@ Options:
         api = m.return_value
         api.hiragana.return_value = {
             'output_type': 'hiragana',
-            'converted': 'にほんご',
+            'converted': u'にほんご',
             'request_id': 'labs.goo.ne.jp\t1419263773\t0'
         }
 
         runner = CliRunner()
-        result = runner.invoke(self._get_target(), ['--app-id=12345', '日本語'])
-        assert result.output == 'にほんご\n'
+        result = runner.invoke(self._get_target(), ['--app-id=12345', u'日本語'])
+        assert result.output == u'にほんご\n'
         m.assert_called_with('12345')
         api.hiragana.assert_called_with(
-            sentence='日本語',
+            sentence=u'日本語',
             output_type='hiragana',
             request_id=None,
         )
@@ -467,7 +506,7 @@ Options:
         api = m.return_value
         api.hiragana.return_value = {
             'output_type': 'hiragana',
-            'converted': 'にほんご',
+            'converted': u'にほんご',
             'request_id': 'labs.goo.ne.jp\t1419263773\t0'
         }
 
@@ -476,13 +515,13 @@ Options:
             '--app-id=12345',
             '--request-id=req001',
             '--output-type=katakana',
-            '日本語',
+            u'日本語',
         ])
-        assert result.output == 'にほんご\n'
+        assert result.output == u'にほんご\n'
 
         m.assert_called_with('12345')
         api.hiragana.assert_called_with(
-            sentence='日本語',
+            sentence=u'日本語',
             output_type='katakana',
             request_id='req001',
         )
@@ -492,7 +531,7 @@ Options:
         api = m.return_value
         api.hiragana.return_value = {
             'output_type': 'hiragana',
-            'converted': 'にほんご',
+            'converted': u'にほんご',
             'request_id': 'labs.goo.ne.jp\t1419263773\t0'
         }
 
@@ -504,10 +543,10 @@ Options:
             result = runner.invoke(self._get_target(),
                                    ['--app-id=12345', '--file=sentence.txt'])
 
-        assert result.output == 'にほんご\n'
+        assert result.output == u'にほんご\n'
         m.assert_called_with('12345')
         api.hiragana.assert_called_with(
-            sentence='日本語',
+            sentence=u'日本語',
             output_type='hiragana',
             request_id=None,
         )
@@ -520,11 +559,12 @@ Options:
         runner = CliRunner()
         result = runner.invoke(self._get_target(), [
             '--app-id=12345',
-            '--json', '日本語'
+            '--json',
+            u'日本語'
         ])
         m.assert_called_with('12345')
         api.hiragana.assert_called_with(
-            sentence='日本語',
+            sentence=u'日本語',
             output_type='hiragana',
             request_id=None,
         )
@@ -562,17 +602,17 @@ Options:
         api = m.return_value
         api.entity.return_value = {
             'ne_list': [
-                ['鈴木', 'PSN'],
+                [u'鈴木', 'PSN'],
             ],
             'request_id': 'labs.goo.ne.jp\t1419264063\t0'
         }
 
         runner = CliRunner()
-        result = runner.invoke(self._get_target(), ['--app-id=12345', '鈴木さん'])
-        assert result.output == '鈴木,PSN\n'
+        result = runner.invoke(self._get_target(), ['--app-id=12345', u'鈴木さん'])
+        assert result.output == u'鈴木,PSN\n'
         m.assert_called_with('12345')
         api.entity.assert_called_with(
-            sentence='鈴木さん',
+            sentence=u'鈴木さん',
             class_filter=None,
             request_id=None,
         )
@@ -582,7 +622,7 @@ Options:
         api = m.return_value
         api.entity.return_value = {
             'ne_list': [
-                ['鈴木', 'PSN'],
+                [u'鈴木', 'PSN'],
             ],
             'request_id': 'labs.goo.ne.jp\t1419264063\t0'
         }
@@ -592,13 +632,13 @@ Options:
             '--app-id=12345',
             '--request-id=req001',
             '--class-filter=PSN,LOC',
-            '鈴木さん',
+            u'鈴木さん',
         ])
-        assert result.output == '鈴木,PSN\n'
+        assert result.output == u'鈴木,PSN\n'
 
         m.assert_called_with('12345')
         api.entity.assert_called_with(
-            sentence='鈴木さん',
+            sentence=u'鈴木さん',
             class_filter='PSN|LOC',
             request_id='req001',
         )
@@ -608,7 +648,7 @@ Options:
         api = m.return_value
         api.entity.return_value = {
             'ne_list': [
-                ['鈴木', 'PSN'],
+                [u'鈴木', 'PSN'],
             ],
             'request_id': 'labs.goo.ne.jp\t1419264063\t0'
         }
@@ -621,10 +661,10 @@ Options:
             result = runner.invoke(self._get_target(),
                                    ['--app-id=12345', '--file=sentence.txt'])
 
-        assert result.output == '鈴木,PSN\n'
+        assert result.output == u'鈴木,PSN\n'
         m.assert_called_with('12345')
         api.entity.assert_called_with(
-            sentence='鈴木さん',
+            sentence=u'鈴木さん',
             class_filter=None,
             request_id=None,
         )
@@ -638,11 +678,11 @@ Options:
         result = runner.invoke(self._get_target(), [
             '--app-id=12345',
             '--json',
-            '鈴木さん'
+            u'鈴木さん'
         ])
         m.assert_called_with('12345')
         api.entity.assert_called_with(
-            sentence='鈴木さん',
+            sentence=u'鈴木さん',
             class_filter=None,
             request_id=None,
         )
@@ -679,19 +719,19 @@ Options:
     def test_minimum_arguments(self, m):
         api = m.return_value
         api.shortsum.return_value = {
-            'summary': '黒の発色が綺麗です',
+            'summary': u'黒の発色が綺麗です',
         }
 
         runner = CliRunner()
         result = runner.invoke(
             self._get_target(),
-            ['--app-id=12345', '黒の発色が綺麗です']
+            ['--app-id=12345', u'黒の発色が綺麗です']
         )
-        assert result.output == '黒の発色が綺麗です\n'
+        assert result.output == u'黒の発色が綺麗です\n'
 
         m.assert_called_with('12345')
         api.shortsum.assert_called_with(
-            review_list=['黒の発色が綺麗です'],
+            review_list=[u'黒の発色が綺麗です'],
             length=None,
             request_id=None,
         )
@@ -700,21 +740,21 @@ Options:
     def test_full_arguments(self, m):
         api = m.return_value
         api.shortsum.return_value = {
-            'summary': '黒の発色が綺麗です',
+            'summary': u'黒の発色が綺麗です',
         }
 
         runner = CliRunner()
         result = runner.invoke(self._get_target(), [
-            '--app-id=12345',
-            '--request-id=req001',
-            '--length=180',
-            '黒の発色が綺麗です',
+            u'--app-id=12345',
+            u'--request-id=req001',
+            u'--length=180',
+            u'黒の発色が綺麗です',
         ])
-        assert result.output == '黒の発色が綺麗です\n'
+        assert result.output == u'黒の発色が綺麗です\n'
 
         m.assert_called_with('12345')
         api.shortsum.assert_called_with(
-            review_list=['黒の発色が綺麗です'],
+            review_list=[u'黒の発色が綺麗です'],
             length=180,
             request_id='req001',
         )
@@ -723,7 +763,7 @@ Options:
     def test_with_review_file(self, m):
         api = m.return_value
         api.shortsum.return_value = {
-            'summary': '黒の発色が綺麗です',
+            'summary': u'黒の発色が綺麗です',
         }
 
         runner = CliRunner()
@@ -734,11 +774,145 @@ Options:
             result = runner.invoke(self._get_target(),
                                    ['--app-id=12345', '--file=review.txt'])
 
-        assert result.output == '黒の発色が綺麗です\n'
+        assert result.output == u'黒の発色が綺麗です\n'
         m.assert_called_with('12345')
         api.shortsum.assert_called_with(
-            review_list=['黒の発色が綺麗です'],
+            review_list=[u'黒の発色が綺麗です'],
             length=None,
+            request_id=None,
+        )
+
+    @mock.patch('goolabs.commands.GoolabsAPI')
+    def test_json_flag(self, m):
+        api = m.return_value
+        api.response.json.return_value = {u'dummy': u'dummydata'}
+
+        runner = CliRunner()
+        result = runner.invoke(self._get_target(), [
+            u'--app-id=12345',
+            u'--json',
+            u'黒の発色が綺麗です',
+        ])
+        m.assert_called_with('12345')
+        api.shortsum.assert_called_with(
+            review_list=[u'黒の発色が綺麗です'],
+            length=None,
+            request_id=None,
+        )
+        assert result.output == """{
+  "dummy": "dummydata"
+}
+"""
+
+
+class TestKeywordCommand(object):
+
+    def _get_target(self):
+        from goolabs.commands import keyword
+        return keyword
+
+    def test_help(self):
+        runner = CliRunner()
+        result = runner.invoke(self._get_target(), ['--help'])
+        expected = """Usage: keyword [OPTIONS] TITLE [BODY]
+
+  Extract "keywords" from an input document.
+
+Options:
+  -a, --app-id TEXT
+  -m, --max_num INTEGER
+  -fo, --forcus [ORG|PSN|LOC]
+  -r, --request-id TEXT
+  -f, --file FILENAME
+  -j, --json / --no-json
+  --help                       Show this message and exit.
+"""
+        assert expected == result.output
+
+    @mock.patch('goolabs.commands.GoolabsAPI')
+    def test_minimum_arguments(self, m):
+        api = m.return_value
+        api.keyword.return_value = {
+            'keywords': [
+                {u'テスト': 0.55},
+            ]
+        }
+
+        runner = CliRunner()
+        result = runner.invoke(
+            self._get_target(),
+            ['--app-id=12345', u'テスト', u'テスト']
+        )
+        assert result.output == u'テスト,0.55\n'
+
+        m.assert_called_with('12345')
+        api.keyword.assert_called_with(
+            title=u'テスト',
+            body=u'テスト',
+            max_num=None,
+            forcus=None,
+            request_id=None,
+        )
+
+    @mock.patch('goolabs.commands.GoolabsAPI')
+    def test_full_arguments(self, m):
+        api = m.return_value
+        api.keyword.return_value = {
+            'keywords': [
+                {u'テスト': 0.55},
+            ]
+        }
+
+        runner = CliRunner()
+        result = runner.invoke(self._get_target(), [
+            '--request-id=req001',
+            '--app-id=12345',
+            '--max_num=2',
+            '--forcus=ORG',
+            'テスト',
+            'テスト',
+        ])
+        assert result.output == u'テスト,0.55\n'
+
+        m.assert_called_with('12345')
+        api.keyword.assert_called_with(
+            title=u'テスト',
+            body=u'テスト',
+            max_num=2,
+            forcus='ORG',
+            request_id='req001',
+        )
+
+    @mock.patch('goolabs.commands.GoolabsAPI')
+    def test_with_body_file(self, m):
+        api = m.return_value
+        api.keyword.return_value = {
+            'keywords': [
+                {u'テスト': 0.55},
+            ]
+        }
+
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with codecs.open('body.txt', 'w', 'utf-8') as f:
+                f.write(u'テスト')
+
+            result = runner.invoke(
+                self._get_target(),
+                [
+                    '--app-id=12345',
+                    u'テスト',
+                    '--file=body.txt'
+                ]
+            )
+
+        assert result.output == u'テスト,0.55\n'
+        m.assert_called_with('12345')
+        api.keyword.assert_called_with(
+            title=u'テスト',
+            body=u'テスト',
+            max_num=None,
+            forcus=None,
             request_id=None,
         )
 
@@ -748,15 +922,16 @@ Options:
         api.response.json.return_value = {'dummy': 'dummydata'}
 
         runner = CliRunner()
-        result = runner.invoke(self._get_target(), [
-            '--app-id=12345',
-            '--json',
-            '黒の発色が綺麗です',
-        ])
+        result = runner.invoke(
+            self._get_target(),
+            ['--app-id=12345', '--json', u'テスト', u'テスト']
+        )
         m.assert_called_with('12345')
-        api.shortsum.assert_called_with(
-            review_list=['黒の発色が綺麗です'],
-            length=None,
+        api.keyword.assert_called_with(
+            title=u'テスト',
+            body=u'テスト',
+            max_num=None,
+            forcus=None,
             request_id=None,
         )
         assert result.output == """{
