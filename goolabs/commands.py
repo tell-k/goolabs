@@ -12,14 +12,14 @@ import json
 import locale
 
 import click
-from six import binary_type
+import six
 
 import goolabs
 from goolabs import GoolabsAPI
 
 
 def text(s):
-    if isinstance(s, binary_type):
+    if isinstance(s, six.binary_type):
         return s.decode(locale.getpreferredencoding())
     return s
 
@@ -239,5 +239,6 @@ def keyword(ctx, app_id, body_file, json_flag, **kwargs):
         return
 
     for k in ret['keywords']:
-        for keyword, score in k.items():
-            click.echo(u'{},{}'.format(keyword, score))
+        k = dict((key.encode('utf-8'), k[key]) for key in k.keys())
+        for keyword, score in six.iteritems(k):
+            click.echo(u'{0},{1}'.format(text(keyword), score))

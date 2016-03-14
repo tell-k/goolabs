@@ -9,7 +9,7 @@ from setuptools.command.test import test as TestCommand
 
 
 class PyTest(TestCommand):
-    user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
+    user_options = [('pytest-args=', 'a', 'Arguments to pass to py.test')]
 
     def initialize_options(self):
         TestCommand.initialize_options(self)
@@ -35,60 +35,61 @@ with open(os.path.join(here, 'goolabs', '__init__.py'), 'r') as f:
 readme = open(os.path.join(here, 'README.rst')).read()
 
 requires = [
-    "requests",
-    "six",
-    "click",
+    'requests',
+    'six',
+    'click',
 ]
 
 tests_require = [
-    "pytest-cov",
-    "pytest",
-    "testfixtures",
-    "responses",
+    'pytest-cov',
+    'pytest',
+    'testfixtures',
+    'responses',
 ]
 
 if sys.version_info < (2, 7):
-    tests_require.append("mock==1.0.1")
+    tests_require.append('mock<=1.0.1')
 else:
-    tests_require.append("mock")
+    tests_require.append('mock')
 
 entry_points = {
-    "console_scripts": [
-        "goolabs=goolabs.commands:main",
+    'console_scripts': [
+        'goolabs=goolabs.commands:main',
     ]
 }
 
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Environment :: Console",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.6",
-    "Programming Language :: Python :: 2.7",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.3",
-    "Programming Language :: Python :: 3.4",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
-    "Topic :: Internet :: WWW/HTTP",
-    "Topic :: Software Development :: Libraries",
+    'Development Status :: 3 - Alpha',
+    'Environment :: Console',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: MIT License',
+    'Programming Language :: Python :: 2',
+    'Programming Language :: Python :: 2.6',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.3',
+    'Programming Language :: Python :: 3.4',
+    'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: Implementation :: CPython',
+    'Programming Language :: Python :: Implementation :: PyPy',
+    'Topic :: Internet :: WWW/HTTP',
+    'Topic :: Software Development :: Libraries',
 ]
 
 setup(
-    name="goolabs",
+    name='goolabs',
     version=version,
-    description="Goo labs API client for python. And provide some command line tools.",  # NOQA
+    description='Goo labs API client for python. And provide some command line tools.',  # NOQA
     long_description=readme,
-    url="https://github.com/tell-k/goolabs",
-    author="tell-k",
-    author_email="ffk2005 at gmail.com",
+    url='https://github.com/tell-k/goolabs',
+    author='tell-k',
+    author_email='ffk2005 at gmail.com',
     classifiers=classifiers,
     keywords=['goolabs', 'web', 'api', 'client'],
     install_requires=requires,
     tests_require=tests_require,
     cmdclass={'test': PyTest},
-    packages=find_packages(exclude=["tests"]),
+    packages=find_packages(exclude=['tests']),
     entry_points=entry_points,
     license='MIT',
 )
