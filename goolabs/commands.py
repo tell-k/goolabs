@@ -242,3 +242,28 @@ def keyword(ctx, app_id, body_file, json_flag, **kwargs):
         k = dict((key.encode('utf-8'), k[key]) for key in k.keys())
         for keyword, score in six.iteritems(k):
             click.echo(u'{0},{1}'.format(text(keyword), score))
+
+
+@main.command()
+@click.argument('sentence', required=False, type=text)
+@click.option('--app-id', '-a', 'app_id', envvar='GOOLABS_APP_ID', type=text)
+@click.option('--request-id', '-r', 'request_id', type=text)
+@click.option('--doc-time', '-d', 'doc_time', type=text)
+@click.option('--file', '-f', 'sentence_file', type=click.File('rb'))
+@click.option('--json/--no-json', '-j', 'json_flag', default=False)
+@click.pass_context
+def chrono(ctx, app_id, sentence_file, json_flag, **kwargs):
+    """Extract expression expressing date and time and normalize its value """
+
+    app_id = clean_app_id(app_id)
+    kwargs['sentence'] = clean_sentence(kwargs.pop('sentence'), sentence_file)
+
+    api = GoolabsAPI(app_id)
+    ret = api.chrono(**kwargs)
+
+    if json_flag:
+        click.echo(format_json(api.response.json()))
+        return
+
+    for pair in ret['datetime_list']:
+        click.echo(u'{0}: {1}'.format(text(pair[0]), pair[1]))

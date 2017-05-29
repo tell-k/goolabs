@@ -224,6 +224,7 @@ Options:
   --help     Show this message and exit.
 
 Commands:
+  chrono      Extract expression expressing date and time...
   entity      Extract unique representation from sentence.
   hiragana    Convert the Japanese to Hiragana or Katakana.
   keyword     Extract "keywords" from an input document.
@@ -933,6 +934,123 @@ Options:
             max_num=None,
             forcus=None,
             request_id=None,
+        )
+        assert result.output == """{
+  "dummy": "dummydata"
+}
+"""
+
+
+class TestChronoCommand(object):
+
+    def _get_target(self):
+        from goolabs.commands import chrono
+        return chrono
+
+    def test_help(self):
+        runner = CliRunner()
+        result = runner.invoke(self._get_target(), ['--help'])
+        expected = """Usage: chrono [OPTIONS] [SENTENCE]
+
+  Extract expression expressing date and time and normalize its value
+
+Options:
+  -a, --app-id TEXT
+  -r, --request-id TEXT
+  -d, --doc-time TEXT
+  -f, --file FILENAME
+  -j, --json / --no-json
+  --help                  Show this message and exit.
+"""
+        assert expected == result.output
+
+    @mock.patch('goolabs.commands.GoolabsAPI')
+    def test_minimum_arguments(self, m):
+        api = m.return_value
+        api.chrono.return_value = {
+            'datetime_list': [
+                [u"今日", "2016-04-01"]
+            ]
+        }
+
+        runner = CliRunner()
+        result = runner.invoke(
+            self._get_target(),
+            ['--app-id=12345', u'テスト']
+        )
+        assert result.output == u'今日: 2016-04-01\n'
+
+        m.assert_called_with('12345')
+        api.chrono.assert_called_with(
+            sentence=u'テスト',
+            request_id=None,
+            doc_time=None,
+        )
+
+    @mock.patch('goolabs.commands.GoolabsAPI')
+    def test_full_arguments(self, m):
+        api = m.return_value
+        api.chrono.return_value = {
+            'datetime_list': [
+                [u"今日", "2016-04-01"]
+            ]
+        }
+
+        runner = CliRunner()
+        result = runner.invoke(self._get_target(), [
+            '--request-id=req001',
+            '--app-id=12345',
+            '--doc-time=2016-04-01T09:00:00',
+            'テスト',
+        ])
+        assert result.output == u'今日: 2016-04-01\n'
+
+        m.assert_called_with('12345')
+        api.chrono.assert_called_with(
+            sentence=u'テスト',
+            doc_time='2016-04-01T09:00:00',
+            request_id='req001',
+        )
+
+    @mock.patch('goolabs.commands.GoolabsAPI')
+    def test_with_sentence_file(self, m):
+        api = m.return_value
+        api.chrono.return_value = {
+            'datetime_list': [
+                [u"今日", "2016-04-01"]
+            ]
+        }
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with codecs.open('sentence.txt', 'w', 'utf-8') as f:
+                f.write(u'日本語')
+
+            result = runner.invoke(self._get_target(),
+                                   ['--app-id=12345', '--file=sentence.txt'])
+
+        assert result.output == u'今日: 2016-04-01\n'
+        m.assert_called_with('12345')
+        api.chrono.assert_called_with(
+            sentence=u'日本語',
+            request_id=None,
+            doc_time=None,
+        )
+
+    @mock.patch('goolabs.commands.GoolabsAPI')
+    def test_json_flag(self, m):
+        api = m.return_value
+        api.response.json.return_value = {'dummy': 'dummydata'}
+
+        runner = CliRunner()
+        result = runner.invoke(
+            self._get_target(),
+            ['--app-id=12345', '--json', u'テスト']
+        )
+        m.assert_called_with('12345')
+        api.chrono.assert_called_with(
+            sentence=u'テスト',
+            request_id=None,
+            doc_time=None,
         )
         assert result.output == """{
   "dummy": "dummydata"

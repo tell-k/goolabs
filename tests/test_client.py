@@ -227,6 +227,33 @@ class TestGoolabsAPI(object):
         assert expected == actual
 
     @responses.activate
+    def test_chrono(self):
+        expected = {
+            'doc_time': "2016-04-01T09:00:00",
+            "datetime_list": [
+                [u"今日", "2016-04-01"],
+                [u"10時半", "2016-04-01T10:30"]
+            ],
+            'request_id': 'chrono-req001'
+        }
+
+        responses.add(
+            responses.POST,
+            'https://labs.goo.ne.jp/api/chrono',
+            body=json.dumps(expected),
+            status=200,
+            content_type='application/json'
+        )
+
+        api = self._make_one(self.app_id)
+        actual = api.chrono(
+            request_id='chrone-req001',
+            sentence=u'今日の10時半に出かけます。',
+            doc_time=u"2016-04-01T09:00:00",
+        )
+        assert expected == actual
+
+    @responses.activate
     def test_bad_request(self):
         from requests.exceptions import HTTPError
 
