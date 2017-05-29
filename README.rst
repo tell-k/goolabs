@@ -347,6 +347,7 @@ Command line tool
     --help     Show this message and exit.
 
   Commands:
+    chrono      Extract expression expressing date and time...
     entity      Extract unique representation from sentence.
     hiragana    Convert the Japanese to Hiragana or Katakana.
     keyword     Extract "keywords" from an input document.
