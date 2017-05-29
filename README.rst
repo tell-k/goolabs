@@ -1,6 +1,6 @@
 Goo labs API client for python. And provide some command line tools.
 
-|travis| |coveralls| |downloads| |version| |license| |requires|
+|travis| |coveralls| |version| |license| |requires|
 
 .. contents::
    :local:
@@ -277,6 +277,46 @@ Sample response.
    "request_id": "labs.goo.ne.jp\t1457928295\t0"
  }
 
+chrono
+--------------------
+
+Extract expression expressing date and time and normalize its value
+
+see also https://labs.goo.ne.jp/api/jp/time-normalization
+
+.. code-block:: python
+
+ from goolabs import GoolabsAPI
+
+ app_id = "xxxxxxxxxxxxxxxxxxxx"
+ api = GoolabsAPI(app_id)
+
+ # See sample response below.
+ ret = api.chrono(
+     sentence="今日の10時半に出かけます。",
+ )
+
+ # All the arguments of this func.
+ api.chrono(
+     request_id="chrono-req001",
+     sentence="今日の10時半に出かけます。",
+     doc_time="2016-04-01T09:00:00",
+ )
+
+Sample response.
+
+.. code-block:: json
+
+ {"request_id":"record007",,"datetime_list":}
+
+ {
+   "datetime_list": [
+     ["今日", "2016-04-01"],
+     ["10時半", "2016-04-01T10:30"]
+   ],
+   "doc_time":"2016-04-01T09:00:00",
+   "request_id": "labs.goo.ne.jp\t1457928295\t0"
+ }
 
 Other tips
 --------------------
@@ -585,6 +625,57 @@ Sample usage.
     "request_id": "req006"
   }
 
+chrono
+--------------------
+
+.. code-block:: bash
+
+  $ goolabs chrono --help
+  Usage: goolabs chrono [OPTIONS] [SENTENCE]
+
+   Extract expression expressing date and time and normalize its value
+
+  ptions:
+   -a, --app-id TEXT
+   -r, --request-id TEXT
+   -d, --doc-time TEXT
+   -f, --file FILENAME
+   -j, --json / --no-json
+   --help                  Show this message and exit.
+
+Sample usage.
+
+.. code-block:: bash
+
+  $ goolabs chrono "今日の10時半に出かけます。"
+  今日: 2017-05-29
+  10時半: 2017-05-29T10:30
+
+  # more option
+  $ goolabs chrono -d "2016-04-01T09:00:00" 
+  今日: 2016-04-01
+  10時半: 2016-04-01T10:30
+
+  # specify a file as an alternative to the body
+  $ goolabs chrono --file sentence.txt
+
+  # get raw json
+  $ goolabs chrono --json --request-id req007 "今日の10時半に出かけます"
+  {
+    "datetime_list": [
+      [
+        "今日",
+        "2017-05-29"
+      ],
+      [
+        "10時半",
+        "2017-05-29T10:30"
+      ]
+    ],
+    "doc_time": "2017-05-29T12:36:33",
+    "request_id": "req007"
+  }
+
 Python Support
 ==============
 * Python 2.6, 2.7, 3,3, 3.4 or later.
@@ -607,6 +698,11 @@ Authors
 
 History
 =======
+
+0.4.0(Mar 29, 2017)
+---------------------
+* Add new api "chrono".
+* Add support for Python3.6.
 
 0.3.0(Mar 14, 2016)
 ---------------------
@@ -640,10 +736,6 @@ History
 .. |coveralls| image:: https://coveralls.io/repos/tell-k/goolabs/badge.png
     :target: https://coveralls.io/r/tell-k/goolabs
     :alt: coveralls.io
-
-.. |downloads| image:: https://img.shields.io/pypi/dm/goolabs.svg
-    :target: http://pypi.python.org/pypi/goolabs/
-    :alt: downloads
 
 .. |version| image:: https://img.shields.io/pypi/v/goolabs.svg
     :target: http://pypi.python.org/pypi/goolabs/

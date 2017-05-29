@@ -9,4 +9,4 @@
 from __future__ import division, print_function, absolute_import  # NOQA
 from goolabs.client import GoolabsAPI  # NOQA
 
-__version__ = '0.3.0'
+__version__ = '0.4.0'
