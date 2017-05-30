@@ -18,6 +18,8 @@ matrix:
      env: TOXENV=pypy
    - python: 3.6
      env: TOXENV=flake8
+   - python: 3.6
+     env: TOXENV=mypy
 install:
   - pip install tox
   - if test "$TOXENV" = py36 ; then pip install coveralls ; fi
