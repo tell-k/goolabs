@@ -700,10 +700,11 @@ Authors
 History
 =======
 
-0.4.0(Mar 29, 2017)
+0.4.0(May 30, 2017)
 ---------------------
 * Add new api "chrono".
 * Add support for Python3.6.
+* Add type annotation.
 
 0.3.0(Mar 14, 2016)
 ---------------------

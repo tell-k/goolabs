@@ -14,3 +14,4 @@ dist/
 .eggs
 .coverage
 __pycache__
+index.txt
