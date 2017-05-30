@@ -84,7 +84,7 @@ setup(
     long_description=readme,
     url='https://github.com/tell-k/goolabs',
     author='tell-k',
-    author_email='ffk2005 at gmail.com',
+    author_email='ffk2005@gmail.com',
     classifiers=classifiers,
     keywords=['goolabs', 'web', 'api', 'client'],
     install_requires=requires,
